@@ -1,43 +1,65 @@
 package dalsgaard.ronnie.migrainmonitor;
 
+import android.content.Context;
 import android.os.Bundle;
-
 import android.support.v4.app.ListFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem;
+import dalsgaard.ronnie.migrainmonitor.util.Time;
 
-public class HistoryFragment extends ListFragment implements MainActivity.MyFragmentInterface {
-    private MyListAdapter adapter;
+import static dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem.TYPE_DATE;
+import static dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem.TYPE_SYMPTOM;
+
+
+public class HistoryFragment extends ListFragment {
+    private MyListAdapter mAdapter;
+    private ListView mListView;
 
     public HistoryFragment() {
-        System.out.println("--> HistoryFragment.Constructor()");
+        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        System.out.println("--> HistoryFragment.onCreate()");
         super.onCreate(savedInstanceState);
-        adapter = new MyListAdapter(getActivity());
-        setListAdapter(adapter);
+        mAdapter = new MyListAdapter(getActivity());
+        setListAdapter(mAdapter);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        System.out.println("--> HistoryFragment.onViewCreated()");
         super.onViewCreated(view, savedInstanceState);
+        int bg_color = ContextCompat.getColor(getActivity(), R.color.Blue);
+        view.setBackgroundColor(bg_color);
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        String str = Symptom.occurences.get(position).getName();
+        ListItem item = Symptom.occurrences.get(position);
+        String str = "";
+        switch (item.getType()) {
+            case TYPE_DATE:
+                str = Time.toDateTimeString(((Symptom.DateItem) item).getTime());
+                break;
+            case TYPE_SYMPTOM:
+                str = ((Symptom.Occurrence) item).getName();
+                break;
+        }
         Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void OnFragmentSelected() {
-        if(adapter != null) adapter.notifyDataSetChanged();
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ((MainActivity) getActivity()).setHistoryFragment(this);
+    }
+
+    public void notifyDataSetChanged() {
+        mAdapter.notifyDataSetChanged();
     }
 }

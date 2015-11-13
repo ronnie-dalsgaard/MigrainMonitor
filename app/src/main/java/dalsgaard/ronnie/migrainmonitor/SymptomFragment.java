@@ -1,7 +1,6 @@
 package dalsgaard.ronnie.migrainmonitor;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -43,11 +42,9 @@ public class SymptomFragment extends Fragment {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Symptom.Occurence occurence = symptom.newSymptomOccurence();
-                    Symptom.occurences.add(occurence);
-                    String str = occurence.toString();
-                    // Toast.makeText(SymptomFragment.this.getActivity(), str, Toast.LENGTH_SHORT).show();
-                    ((iSymptomFragmentCallback) getActivity()).onSymptomFragmentCallback();
+                    Symptom.Occurrence occurrence = symptom.newSymptomOccurence();
+                    String str = occurrence.toString();
+                    ((MainActivity) getActivity()).onOccurrenceAdded(occurrence);
                 }
             });
             btn.setBackgroundColor(0xff000000 + symptom.getColor()); // add alpha to color
@@ -62,17 +59,17 @@ public class SymptomFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str = "";
-                for (Symptom.Occurence o : Symptom.occurences) {
-                    str += o.getName() + "\n";
-                }
-                Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
+//                String str = "";
+//                for(int i : Symptom.types){
+//                    str += i == 0 ? "DATE" : "SYMPTOM";
+//                    str += "\n";
+//                }
+//                for (Symptom.Occurrence o : Symptom.occurrences) {
+//                    str += o.getName() + "\n";
+//                }
+//                Toast.makeText(getActivity(), str, Toast.LENGTH_LONG).show();
             }
         });
         return view;
-    }
-
-    interface iSymptomFragmentCallback {
-        public void onSymptomFragmentCallback();
     }
 }

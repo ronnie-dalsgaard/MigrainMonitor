@@ -13,7 +13,7 @@
         android:paddingEnd="16dp"
         android:textSize="14sp"
         android:textColor="@color/WhiteSmoke"
-        android:layout_height="100dp" />
+        android:layout_height="60dp" />
 
     <TextView
         android:id="@+id/list_item_history_time_tv"
@@ -24,6 +24,6 @@
         android:paddingEnd="16dp"
         android:textSize="12sp"
         android:textColor="@color/WhiteSmoke"
-        android:layout_height="50dp" />
+        android:layout_height="20dp" />
 
 </RelativeLayout>

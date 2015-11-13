@@ -35,6 +35,22 @@ public class Time {
         int day = instance.get(Calendar.DAY_OF_MONTH);
         int month = instance.get(Calendar.MONTH) +1;
         int year = instance.get(Calendar.YEAR);
-        return String.format("%d:%d:%d %d/%d-%d", hour, min, sec, day, month, year);
+        return String.format("%d/%d-%d %d:%d:%d", day, month, year, hour, min, sec);
+    }
+
+    public static boolean sameDay(long t1, long t2){
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTimeInMillis(t1);
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTimeInMillis(t2);
+
+        for(int field : new int[] { Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH } ){
+            if(cal1.get(field) != cal2.get(field)) return false;
+        }
+
+        // FIXME for debug
+        if(Math.abs(cal1.get(Calendar.SECOND) - cal2.get(Calendar.SECOND)) > 3) return false;
+
+        return true;
     }
 }
