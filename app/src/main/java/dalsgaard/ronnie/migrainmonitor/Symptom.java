@@ -1,12 +1,8 @@
 package dalsgaard.ronnie.migrainmonitor;
 
-import android.app.LauncherActivity;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 import dalsgaard.ronnie.migrainmonitor.util.Time;
 import dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem;
@@ -17,41 +13,44 @@ import static dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem.TYPE_SYMPTO
  * Created by Ronnie D on 07-11-2015.
  */
 public class Symptom {
-    public static ArrayList<Symptom> symptoms = new ArrayList();
-    public static ArrayList<ListItem> occurrences = new ArrayList();
+    public static ArrayList<Symptom> symptomList = new ArrayList<>();
+    private static ArrayList<ListItem> occurrenceList = new ArrayList<>();
     private String name;
     private int color;
     static {
         // Prodrome
-        symptoms.add(new Symptom("Constipation", 0xDB_70_93));
-        symptoms.add(new Symptom("Diarrhea", 0xFF_14_93));
-        symptoms.add(new Symptom("Depression", 0x64_95_ED));
-        symptoms.add(new Symptom("Food cravings", 0xFF_00_FF));
-        symptoms.add(new Symptom("Hyperactivity", 0x00_80_80));
-        symptoms.add(new Symptom("Irritability", 0xFF_D7_00));
-        symptoms.add(new Symptom("Neck stiffness", 0xFF_8C_00));
-        symptoms.add(new Symptom("Uncontrollable yawning", 0x46_82_B4));
+        symptomList.add(new Symptom("Constipation", 0xDB_70_93)); // 0
+        symptomList.add(new Symptom("Diarrhea", 0xFF_14_93)); // 1
+        symptomList.add(new Symptom("Depression", 0x64_95_ED)); // 2
+        symptomList.add(new Symptom("Food cravings", 0xFF_00_FF)); // 3
+        symptomList.add(new Symptom("Hyperactivity", 0x00_80_80)); // 4
+        symptomList.add(new Symptom("Irritability", 0xDF_B7_00)); // 5
+        symptomList.add(new Symptom("Neck stiffness", 0xFF_8C_00)); // 6
+        symptomList.add(new Symptom("Uncontrollable yawning", 0x46_82_B4)); // 7
 
         // Aura
-        symptoms.add(new Symptom("Visual phenomena", 0x40_E0_D0)); // such as seeing various shapes, bright spots or flashes of light
-        symptoms.add(new Symptom("Vision loss", 0xB0_C4_DE));
-        symptoms.add(new Symptom("Skin tinkling", 0xFF_63_47)); // Pins and needles
-        symptoms.add(new Symptom("Aphasia", 0x9A_CD_32));
+        symptomList.add(new Symptom("Visual phenomena", 0x40_E0_D0)); // such as seeing various shapes, bright spots or flashes of light
+        symptomList.add(new Symptom("Vision loss", 0xB0_C4_DE)); // 9
+        symptomList.add(new Symptom("Skin tinkling", 0xFF_63_47)); // Pins and needles
+        symptomList.add(new Symptom("Aphasia", 0x9A_CD_32)); // 11
 
         // Attack
-        symptoms.add(new Symptom("Mild headace", 0xE0_66_FF));
-        symptoms.add(new Symptom("Severe headace", 0xDD_A0_DD));
-        symptoms.add(new Symptom("Photophobia", 0x48_76_FF)); // Sensitivity to light
-        symptoms.add(new Symptom("Hyperosmia", 0x22_8B_22)); // Sensitivity to smells
-        symptoms.add(new Symptom("Nausea", 0x94_00_D3));
-        symptoms.add(new Symptom("Vomiting", 0xCD_CD_00));
-        symptoms.add(new Symptom("Blurred vision", 0xDC_14_3C));
+        symptomList.add(new Symptom("Mild headace", 0xE0_66_FF)); // 12
+        symptomList.add(new Symptom("Severe headace", 0xDD_A0_DD)); // 13
+        symptomList.add(new Symptom("Photophobia", 0x48_76_FF)); // Sensitivity to light
+        symptomList.add(new Symptom("Hyperosmia", 0x22_8B_22)); // Sensitivity to smells
+        symptomList.add(new Symptom("Nausea", 0x94_00_D3)); // 16
+        symptomList.add(new Symptom("Vomiting", 0xCD_CD_00)); // 17
+        symptomList.add(new Symptom("Blurred vision", 0xDC_14_3C)); // 18
+    }
+    static { // TODO Debug
+        addOccurrence(symptomList.get(12).createSymptomOccurence(System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000)); // Mild headache
+        addOccurrence(symptomList.get(06).createSymptomOccurence(System.currentTimeMillis() - 3 * 24 * 60 * 60 * 1000)); // Neck stiffness
+        addOccurrence(symptomList.get(02).createSymptomOccurence(System.currentTimeMillis() - 4 * 24 * 60 * 60 * 1000)); // Depression
+        addOccurrence(symptomList.get(03).createSymptomOccurence(System.currentTimeMillis() - 4 * 24 * 60 * 60 * 1000)); // Food cravings
+        addOccurrence(symptomList.get(14).createSymptomOccurence(System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000));  // Photophobia
 
-        symptoms.get(2).newSymptomOccurence(System.currentTimeMillis() - 2*24*60*60*1000);
-        symptoms.get(2).newSymptomOccurence(System.currentTimeMillis() - 2*24*60*60*1000);
-        symptoms.get(2).newSymptomOccurence(System.currentTimeMillis() - 2*24*60*60*1000);
-        symptoms.get(2).newSymptomOccurence(System.currentTimeMillis() - 2*24*60*60*1000);
-        symptoms.get(2).newSymptomOccurence(System.currentTimeMillis() - 2*24*60*60*1000);
+        cleanUpOccurences();
     }
 
     public Symptom(String name, int color){
@@ -59,21 +58,11 @@ public class Symptom {
         this.color = color;
     }
 
-    public final Occurrence newSymptomOccurence(){
-        return newSymptomOccurence(System.currentTimeMillis());
+    public final Occurrence createSymptomOccurence(){
+        return createSymptomOccurence(System.currentTimeMillis());
     }
-    public final Occurrence newSymptomOccurence(long datetime){
+    public final Occurrence createSymptomOccurence(long datetime){
         Occurrence occurrence = new Occurrence(name, color, datetime);
-        int index = occurrences.size();
-        if(index == 0){
-            occurrences.add(new DateItem(occurrence.getTime()));
-        } else if(index > 0){
-            Occurrence previous = (Occurrence) occurrences.get(index -1);
-            if(! Time.sameDay(occurrence.getTime(), previous.getTime())){
-                occurrences.add(new DateItem(occurrence.getTime()));
-            }
-        }
-        occurrences.add(occurrence);
         return occurrence;
     }
 
@@ -84,9 +73,36 @@ public class Symptom {
         return color;
     }
 
-    public static void cleanOccurences(){
+    public static final ArrayList<ListItem> getOccurrences(){
+        return occurrenceList;
+    }
+    public static final void addOccurrence(long time, Occurrence... occurrences){
+        // Handle invalid input
+        if(occurrences == null || occurrences.length == 0) throw new IllegalArgumentException();
+
+        // Align occurrences
+        for(Occurrence occurrence : occurrences) occurrence.setTime(time);
+
+        // Add header
+        occurrenceList.add(0, new Header(time));
+
+        // Add all occurrenceList
+        for(Occurrence occurrence : occurrences){
+            occurrenceList.add(1, occurrence);
+        }
+    }
+    public static final void addOccurrence(Occurrence... occurrences){
+        // Handle invalid input
+        if(occurrences == null || occurrences.length == 0) throw new IllegalArgumentException();
+
+        // Align occurences
+        long time = occurrences[0].getTime();
+
+        addOccurrence(time, occurrences);
+    }
+    public static void cleanUpOccurences(){
         // Sort list
-        Collections.sort(occurrences, new Comparator<ListItem>() {
+        Collections.sort(occurrenceList, new Comparator<ListItem>() {
             @Override
             public int compare(ListItem lhs, ListItem rhs) {
                 if(Time.sameDay(lhs.getTime(), rhs.getTime())){
@@ -99,19 +115,40 @@ public class Symptom {
                         return _lhs.getName().compareTo(_rhs.getName());
                     }
                 }
-                return lhs.getTime() - rhs.getTime() < 0 ? -1 : +1;
+                return lhs.getTime() - rhs.getTime() < 0 ? +1 : -1;
             }
         });
 
-        // Add missing headers
-        for(int i = occurrences.size()-1; i > 0; i--){
-            ListItem current = occurrences.get(i);
-            ListItem previous = occurrences.get(i-1);
+        // Clean-up
+        for(int i = occurrenceList.size()-1; i > 0; i--){
+            ListItem current = occurrenceList.get(i);
+            ListItem previous = occurrenceList.get(i-1);
 
+            // Add Date
+            if(current.getType() == TYPE_SYMPTOM && previous.getType() == TYPE_SYMPTOM
+                    && !Time.sameDay(current.getTime(), previous.getTime())){
+                Header dt = new Header(current.getTime());
+                occurrenceList.add(i, dt); // Pushback ramaining items
+            }
+
+            // Remove identical Headers
+            if(current.getType() == TYPE_DATE && previous.getType() == TYPE_DATE){
+                occurrenceList.remove(current);
+            }
+
+            // Remove identical Symptoms
+            if(current.getType() == TYPE_SYMPTOM && previous.getType() == TYPE_SYMPTOM){
+                Occurrence _current = (Occurrence) current;
+                Occurrence _previous = (Occurrence) previous;
+                // Two symptomList next to each other must have the same date.
+                if(_current.getName().equals(_previous.getName())){
+                    occurrenceList.remove(current);
+                }
+            }
         }
     }
 
-    public class Occurrence extends Symptom implements ListItem, Comparable<Occurrence> {
+    public static class Occurrence extends Symptom implements ListItem, Comparable<Occurrence> {
         private long time;
 
         public Occurrence(String name, int color) {
@@ -122,10 +159,22 @@ public class Symptom {
             super(name, color);
             this.time = time;
         }
+        public Occurrence(Occurrence original){
+            this(original.getName(), original.getColor(), original.getTime());
+        }
 
         @Override
         public long getTime(){
             return time;
+        }
+
+        public void setTime(long time){
+            this.time = time;
+        }
+
+        @Override
+        public int getType() {
+            return TYPE_SYMPTOM;
         }
 
         @Override
@@ -158,11 +207,6 @@ public class Symptom {
         }
 
         @Override
-        public int getType() {
-            return TYPE_SYMPTOM;
-        }
-
-        @Override
         public int compareTo(Occurrence that) {
             if(Time.sameDay(this.getTime(), that.getTime())){
                 return this.getName().compareTo(that.getName());
@@ -171,10 +215,10 @@ public class Symptom {
         }
     }
 
-    public class DateItem implements ListItem {
+    public static class Header implements ListItem {
         private long time;
 
-        public DateItem(long time){
+        public Header(long time){
             this.time = time;
         }
 

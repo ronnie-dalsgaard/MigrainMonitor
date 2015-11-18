@@ -55,11 +55,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     public void setHistoryFragment(HistoryFragment historyFragment){
         mHistoryFragment = historyFragment;
-        System.out.println("--> MainActivity.setHistoryFragment()");
     }
 
     public void onOccurrenceAdded(Symptom.Occurrence occurrence) {
-        System.out.println("--> MainActivity.onSymptomFragmentCallback() : "+(mHistoryFragment == null? "null" : "Hist.Frag. exists"));
         if(mHistoryFragment != null) mHistoryFragment.notifyDataSetChanged();
     }
 
@@ -67,17 +65,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         // Ignored
-        //System.out.println("--> MainActivity.OnPageChangeListener.onPageScrolled()");
     }
     @Override
     public void onPageSelected(int position) {
-        System.out.println("--> MainActivity.OnPageChangeListener.onPageSelected()");
-        mHistoryFragment.notifyDataSetChanged();
+        if(mHistoryFragment != null) mHistoryFragment.notifyDataSetChanged();
     }
     @Override
     public void onPageScrollStateChanged(int state) {
         // Ignored
-        System.out.println("--> MainActivity.OnPageChangeListener.onPageScrollStateChanged()");
     }
 
 

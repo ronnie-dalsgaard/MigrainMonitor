@@ -40,11 +40,11 @@ public class HistoryFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        ListItem item = Symptom.occurrences.get(position);
+        ListItem item = Symptom.getOccurrences().get(position);
         String str = "";
         switch (item.getType()) {
             case TYPE_DATE:
-                str = Time.toDateTimeString(((Symptom.DateItem) item).getTime());
+                str = Time.toDateTimeString(((Symptom.Header) item).getTime());
                 break;
             case TYPE_SYMPTOM:
                 str = ((Symptom.Occurrence) item).getName();

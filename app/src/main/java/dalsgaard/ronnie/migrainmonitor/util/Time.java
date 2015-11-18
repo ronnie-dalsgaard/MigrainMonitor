@@ -35,7 +35,7 @@ public class Time {
         int day = instance.get(Calendar.DAY_OF_MONTH);
         int month = instance.get(Calendar.MONTH) +1;
         int year = instance.get(Calendar.YEAR);
-        return String.format("%d/%d-%d %d:%d:%d", day, month, year, hour, min, sec);
+        return String.format("%02d/%02d-%d %02d:%02d:%02d", day, month, year, hour, min, sec);
     }
 
     public static boolean sameDay(long t1, long t2){

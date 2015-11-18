@@ -20,7 +20,7 @@ public class MyListAdapter extends ArrayAdapter<MyListAdapter.ListItem> {
     private final Context context;
 
     public MyListAdapter(Context context) {
-        super(context, R.layout.list_item_history_occurrence, Symptom.occurrences);
+        super(context, R.layout.list_item_history_occurrence, Symptom.getOccurrences());
         this.context = context;
     }
 
@@ -41,7 +41,7 @@ public class MyListAdapter extends ArrayAdapter<MyListAdapter.ListItem> {
                 } else {
                     sHolder = (SymptomViewHolder) convertView.getTag();
                 }
-                Symptom.Occurrence occurrence = (Symptom.Occurrence) Symptom.occurrences.get(position);
+                Symptom.Occurrence occurrence = (Symptom.Occurrence) Symptom.getOccurrences().get(position);
                 sHolder.base_rl.setBackgroundColor(0xff000000 + occurrence.getColor());
                 sHolder.name_tv.setText(occurrence.getName().toUpperCase());
                 sHolder.time_tv.setText(Time.toDateTimeString(occurrence.getTime()));
@@ -53,14 +53,12 @@ public class MyListAdapter extends ArrayAdapter<MyListAdapter.ListItem> {
                     convertView = inflater.inflate(R.layout.list_item_history_date, null);
                     dHolder = new DateTimeHolder();
                     dHolder.datetime_tv = (TextView) convertView.findViewById(R.id.list_item_history_date_tv);
-                    dHolder.margin = convertView.findViewById(R.id.list_item_history_date_margin);
                     convertView.setTag(dHolder);
                 } else {
                     dHolder = (DateTimeHolder) convertView.getTag();
                 }
-                Symptom.DateItem dt = (Symptom.DateItem) Symptom.occurrences.get(position);
+                Symptom.Header dt = (Symptom.Header) Symptom.getOccurrences().get(position);
                 dHolder.datetime_tv.setText(Time.toDateTimeString(dt.getTime()).split(" ")[0]);
-                if(position == 0) dHolder.margin.setVisibility(View.GONE);
                 return convertView;
 
             default: return null;
@@ -74,7 +72,6 @@ public class MyListAdapter extends ArrayAdapter<MyListAdapter.ListItem> {
 
     static class DateTimeHolder {
         TextView datetime_tv;
-        View margin;
     }
 
     @Override
@@ -84,7 +81,7 @@ public class MyListAdapter extends ArrayAdapter<MyListAdapter.ListItem> {
 
     @Override
     public int getItemViewType(int position) {
-        return Symptom.occurrences.get(position).getType();
+        return Symptom.getOccurrences().get(position).getType();
     }
 
     interface ListItem {

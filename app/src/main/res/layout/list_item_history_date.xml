@@ -6,12 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <View
-        android:id="@+id/list_item_history_date_margin"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/Blue" />
-
     <TextView
         android:id="@+id/list_item_history_date_tv"
         android:layout_width="match_parent"

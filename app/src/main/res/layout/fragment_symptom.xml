@@ -14,7 +14,7 @@
         android:text="@string/save" />
 
     <ScrollView
-        android:id="@+id/scrollView"
+        android:id="@+id/framgment_symptom_scroller"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/fragment_symptom_btn_save">
