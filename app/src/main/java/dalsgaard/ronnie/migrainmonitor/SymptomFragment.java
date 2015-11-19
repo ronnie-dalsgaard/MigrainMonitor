@@ -17,9 +17,9 @@ import java.util.Collections;
 
 
 public class SymptomFragment extends Fragment {
-    private ArrayList<Symptom.Occurrence> selected = new ArrayList<>();
-    private ArrayList<Button> buttons = new ArrayList<>();
-    private View scroller;
+    private ArrayList<Symptom.Occurrence> mSelected = new ArrayList<>();
+    private ArrayList<Button> mButtons = new ArrayList<>();
+    private View mScroller;
 
     public SymptomFragment() {
         // Required empty public constructor
@@ -29,13 +29,13 @@ public class SymptomFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_symptom, container, false);
-        scroller = view.findViewById(R.id.framgment_symptom_scroller);
+        mScroller = view.findViewById(R.id.framgment_symptom_scroller);
         LinearLayout col1 = (LinearLayout)view.findViewById(R.id.fragment_symptom_col1);
         LinearLayout col2 = (LinearLayout)view.findViewById(R.id.fragment_symptom_col2);
         LinearLayout col3 = (LinearLayout)view.findViewById(R.id.fragment_symptom_col3);
 
-        for(int i = 0; i < Symptom.symptomList.size(); i++){
-            final Symptom symptom = Symptom.symptomList.get(i);
+        for(int i = 0; i < Symptom.mSymptomList.size(); i++){
+            final Symptom symptom = Symptom.mSymptomList.get(i);
             LinearLayout col;
             switch(i%3){
                 case 0: col = col1; break;
@@ -52,12 +52,11 @@ public class SymptomFragment extends Fragment {
                 public void onClick(View v) {
                     Symptom.Occurrence occurrence = symptom.createSymptomOccurence();
                     String str = occurrence.toString();
-                    ((MainActivity) getActivity()).onOccurrenceAdded(occurrence);
-                    if (selected.contains(occurrence)) {
-                        selected.remove(occurrence);
+                    if (mSelected.contains(occurrence)) {
+                        mSelected.remove(occurrence);
                         v.setAlpha(1.0f);
                     } else {
-                        selected.add(occurrence);
+                        mSelected.add(occurrence);
                         v.setAlpha(0.25f);
                     }
                 }
@@ -66,7 +65,7 @@ public class SymptomFragment extends Fragment {
             btn.setTextColor(ContextCompat.getColor(getActivity(), R.color.WhiteSmoke));
             btn.setHeight(125);
             // Width are controlled by weight of layout(column)
-            buttons.add(btn);
+            mButtons.add(btn);
             col.addView(btn);
         }
 
@@ -76,23 +75,25 @@ public class SymptomFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Fix format
-                Collections.sort(selected);
-                Symptom.Occurrence[] occurrences = selected.toArray(new Symptom.Occurrence[selected.size()]);
+                Collections.sort(mSelected);
+                Symptom.Occurrence[] occurrences = mSelected.toArray(new Symptom.Occurrence[mSelected.size()]);
 
                 // Add occurences
                 long time = System.currentTimeMillis();
                 Symptom.addOccurrence(time, occurrences);
 
                 // Diplay message
-                String msg = selected.size() + " symptoms added.";
-                if(scroller != null) Snackbar.make(scroller, msg, Snackbar.LENGTH_LONG).show();
+                String msg = mSelected.size() + " symptoms added.";
+                if(mScroller != null) Snackbar.make(mScroller, msg, Snackbar.LENGTH_LONG).show();
                 else Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
 
                 // Clean up
-                selected.clear();
-                for(Button btn : buttons) {
+                mSelected.clear();
+                for(Button btn : mButtons) {
                     btn.setAlpha(1.0f);
                 }
+
+                ((MainActivity) getActivity()).onOccurrenceAdded(occurrences);
             }
         });
         return view;

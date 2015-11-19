@@ -14,7 +14,7 @@
         android:paddingEnd="16dp"
         android:textSize="18sp"
         android:textColor="@color/WhiteSmoke"
-        android:background="@color/DarkBlue"
+        android:background="@color/Blue"
         android:layout_height="60dp" />
 
 </LinearLayout>

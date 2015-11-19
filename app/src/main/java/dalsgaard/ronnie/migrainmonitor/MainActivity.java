@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mHistoryFragment = historyFragment;
     }
 
-    public void onOccurrenceAdded(Symptom.Occurrence occurrence) {
+    public void onOccurrenceAdded(Symptom.Occurrence... occurrence) {
         if(mHistoryFragment != null) mHistoryFragment.notifyDataSetChanged();
     }
 
