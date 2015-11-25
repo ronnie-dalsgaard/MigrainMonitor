@@ -7,7 +7,7 @@ import java.util.Comparator;
 import dalsgaard.ronnie.migrainmonitor.util.Time;
 import dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem;
 import static dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem.TYPE_DATE;
-import static dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem.TYPE_SYMPTOM;
+import static dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem.TYPE_OCCURRENCE;
 
 /**
  * Created by Ronnie D on 07-11-2015.
@@ -76,6 +76,14 @@ public class Symptom {
     public static final ArrayList<ListItem> getOccurrences(){
         return mOccurrenceList;
     }
+    public static final Occurrence getOccurrence(String id){
+        for(ListItem item : mOccurrenceList){
+            if(!(item instanceof Occurrence)) continue;
+            Occurrence occurrence = (Occurrence)item;
+            if(occurrence.getId().equals(id)) return occurrence;
+        }
+        return null;
+    }
     public static final void addOccurrence(long time, Occurrence... occurrences){
         // Handle invalid input
         if(occurrences == null || occurrences.length == 0) throw new IllegalArgumentException();
@@ -107,9 +115,9 @@ public class Symptom {
             public int compare(ListItem lhs, ListItem rhs) {
                 if(Time.sameDay(lhs.getTime(), rhs.getTime())){
                     if(lhs.getType() == TYPE_DATE && rhs.getType() == TYPE_DATE) return 0; // Shouldn't happen
-                    else if(lhs.getType() == TYPE_DATE && rhs.getType() == TYPE_SYMPTOM) return -1;
-                    else if(lhs.getType() == TYPE_SYMPTOM && rhs.getType() == TYPE_DATE) return +1;
-                    else { // lhs.getType() == TYPE_SYMPTOM && rhs.getType() == TYPE_SYMPTOM
+                    else if(lhs.getType() == TYPE_DATE && rhs.getType() == TYPE_OCCURRENCE) return -1;
+                    else if(lhs.getType() == TYPE_OCCURRENCE && rhs.getType() == TYPE_DATE) return +1;
+                    else { // lhs.getType() == TYPE_OCCURRENCE && rhs.getType() == TYPE_OCCURRENCE
                         Occurrence _lhs = (Occurrence)lhs;
                         Occurrence _rhs = (Occurrence)rhs;
                         return _lhs.getName().compareTo(_rhs.getName());
@@ -125,7 +133,7 @@ public class Symptom {
             ListItem previous = mOccurrenceList.get(i-1);
 
             // Add Date
-            if(current.getType() == TYPE_SYMPTOM && previous.getType() == TYPE_SYMPTOM
+            if(current.getType() == TYPE_OCCURRENCE && previous.getType() == TYPE_OCCURRENCE
                     && !Time.sameDay(current.getTime(), previous.getTime())){
                 Header dt = new Header(current.getTime());
                 mOccurrenceList.add(i, dt); // Pushback ramaining items
@@ -137,7 +145,7 @@ public class Symptom {
             }
 
             // Remove identical Symptoms
-            if(current.getType() == TYPE_SYMPTOM && previous.getType() == TYPE_SYMPTOM){
+            if(current.getType() == TYPE_OCCURRENCE && previous.getType() == TYPE_OCCURRENCE){
                 Occurrence _current = (Occurrence) current;
                 Occurrence _previous = (Occurrence) previous;
                 // Two symptoms in the same block must have the same date.
@@ -150,6 +158,7 @@ public class Symptom {
 
     public static class Occurrence extends Symptom implements ListItem, Comparable<Occurrence> {
         private long mTime;
+        private String mId;
 
         public Occurrence(String name, int color) {
             this(name, color, System.currentTimeMillis());
@@ -157,6 +166,7 @@ public class Symptom {
         public Occurrence(String name, int color, long time){
             super(name, color);
             mTime = time;
+            mId = name+time;
         }
         public Occurrence(Occurrence original){
             this(original.getName(), original.getColor(), original.getTime());
@@ -168,9 +178,12 @@ public class Symptom {
         public long getTime(){
             return mTime;
         }
+        public String getId(){
+            return mId;
+        }
         @Override
         public int getType() {
-            return TYPE_SYMPTOM;
+            return TYPE_OCCURRENCE;
         }
         @Override
         public boolean equals(Object o) {

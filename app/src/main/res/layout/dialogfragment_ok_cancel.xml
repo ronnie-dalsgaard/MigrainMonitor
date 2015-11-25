@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/Blue"
+    android:orientation="vertical"
+    tools:context="dalsgaard.ronnie.migrainmonitor.OccurrenceDetailActivityFragment">
+
+    <TextView
+        android:id="@+id/dialogfragment_ok_cancel_text"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:gravity="center_vertical"
+        android:text="Text"
+        android:textColor="@color/WhiteSmoke"
+        android:textSize="24dp" />
+
+
+    <Button
+        android:id="@+id/dialogfragment_ok_btn"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/dialogfragment_ok_cancel_text"
+        android:background="@color/DarkBlue"
+        android:layout_margin="3dp"
+        android:text="OK"
+        android:textColor="@color/WhiteSmoke" />
+
+    <Button
+        android:id="@+id/dialogfragment_cancel_btn"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/dialogfragment_ok_cancel_text"
+        android:layout_toRightOf="@+id/dialogfragment_ok_btn"
+        android:background="@color/DarkBlue"
+        android:layout_margin="3dp"
+        android:text="Cancel"
+        android:textColor="@color/WhiteSmoke" />
+
+</RelativeLayout>

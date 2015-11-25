@@ -1,5 +1,6 @@
 package dalsgaard.ronnie.migrainmonitor;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -12,7 +13,7 @@ import dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem;
 import dalsgaard.ronnie.migrainmonitor.util.Time;
 
 import static dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem.TYPE_DATE;
-import static dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem.TYPE_SYMPTOM;
+import static dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem.TYPE_OCCURRENCE;
 
 
 public class HistoryFragment extends ListFragment {
@@ -46,7 +47,7 @@ public class HistoryFragment extends ListFragment {
             case TYPE_DATE:
                 str = Time.toDateTimeString(((Symptom.Header) item).getTime());
                 break;
-            case TYPE_SYMPTOM:
+            case TYPE_OCCURRENCE:
                 str = ((Symptom.Occurrence) item).getName();
                 break;
         }
@@ -56,7 +57,11 @@ public class HistoryFragment extends ListFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        ((MainActivity) getActivity()).setHistoryFragment(this);
+        try { ((MainActivity) getActivity()).setHistoryFragment(this); }
+        catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must be of type dalsgaard.ronnie.migrainmonitor.MainActivity");
+        }
     }
 
     public void notifyDataSetChanged() {

@@ -4,6 +4,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
 <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello sweetie</string>
+    <string name="hello_blank_fragment">1</string>
     <string name="save">Save</string>
+    <string name="title_activity_occurence_detail">OccurenceDetailActivity</string>
 </resources>

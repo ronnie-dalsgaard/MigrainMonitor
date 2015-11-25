@@ -3,10 +3,11 @@ package dalsgaard.ronnie.migrainmonitor;
 import android.app.Activity;
 
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import android.widget.Toast;
 import dalsgaard.ronnie.migrainmonitor.util.Time;
 
 import static dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem.TYPE_DATE;
-import static dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem.TYPE_SYMPTOM;
+import static dalsgaard.ronnie.migrainmonitor.MyListAdapter.ListItem.TYPE_OCCURRENCE;
 
 /**
  * Created by Ronnie D on 07-11-2015.
@@ -36,8 +37,9 @@ public class MyListAdapter extends ArrayAdapter<MyListAdapter.ListItem> implemen
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        // Create (or update) an item view - There are 2 types of items
         switch (this.getItemViewType(position)) {
-            case TYPE_SYMPTOM:
+            case TYPE_OCCURRENCE:
                 SymptomViewHolder sHolder;
                 if (convertView == null) {
                     convertView = inflater.inflate(R.layout.list_item_history_occurrence, null);
@@ -82,13 +84,13 @@ public class MyListAdapter extends ArrayAdapter<MyListAdapter.ListItem> implemen
         switch (v.getId()) {
             case R.id.list_item_history_more_btn:
                 Symptom.Occurrence occurrence = (Symptom.Occurrence) v.getTag();
+                String occurrence_id = occurrence.getId();
+
                 Toast.makeText(mActivity, "MORE " + occurrence.getName(), Toast.LENGTH_SHORT).show();
-                DialogFragment fragment = new OccurrenceMoreFragment();
-                Bundle bundle = new Bundle();
-                // Todo bundle.putParcelable(occurrence);
-                fragment.setArguments(bundle);
-                FragmentManager fragmentManager = mActivity.getFragmentManager();
-                fragment.show(fragmentManager, "TAG");
+
+                Intent intent = new Intent(mActivity, OccurenceDetailActivity.class);
+                intent.putExtra(OccurenceDetailActivity.KEY_OCCURRENCEID, occurrence_id);
+                mActivity.startActivity(intent);
                 break;
         }
     }
@@ -115,7 +117,7 @@ public class MyListAdapter extends ArrayAdapter<MyListAdapter.ListItem> implemen
 
     interface ListItem {
         public static final int TYPE_DATE = 0;
-        public static final int TYPE_SYMPTOM = 1;
+        public static final int TYPE_OCCURRENCE = 1;
 
         public int getType();
 
