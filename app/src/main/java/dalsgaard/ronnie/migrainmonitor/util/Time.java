@@ -26,6 +26,11 @@ public class Time {
         c.setTimeInMillis(time);
         return toDateTimeString(c);
     }
+    public static String toDateString(long time) {
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(time);
+        return toDateString(c);
+    }
 
     public static String toDateTimeString(Calendar instance) {
         int hour = instance.get(Calendar.HOUR_OF_DAY);
@@ -36,6 +41,17 @@ public class Time {
         int month = instance.get(Calendar.MONTH) +1;
         int year = instance.get(Calendar.YEAR);
         return String.format("%02d/%02d-%d %02d:%02d:%02d", day, month, year, hour, min, sec);
+    }
+
+    public static String toDateString(Calendar instance) {
+        int hour = instance.get(Calendar.HOUR_OF_DAY);
+        int min =  instance.get(Calendar.MINUTE);
+        int sec =  instance.get(Calendar.SECOND);
+        int millis = instance.get(Calendar.MILLISECOND);
+        int day = instance.get(Calendar.DAY_OF_MONTH);
+        int month = instance.get(Calendar.MONTH) +1;
+        int year = instance.get(Calendar.YEAR);
+        return String.format("%02d/%02d-%d", day, month, year);
     }
 
     public static boolean sameDay(long t1, long t2){

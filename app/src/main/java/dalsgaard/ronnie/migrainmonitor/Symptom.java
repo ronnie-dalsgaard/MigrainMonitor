@@ -159,6 +159,7 @@ public class Symptom {
     public static class Occurrence extends Symptom implements ListItem, Comparable<Occurrence> {
         private long mTime;
         private String mId;
+        private int mCount;
 
         public Occurrence(String name, int color) {
             this(name, color, System.currentTimeMillis());
@@ -167,6 +168,7 @@ public class Symptom {
             super(name, color);
             mTime = time;
             mId = name+time;
+            mCount = 1;
         }
         public Occurrence(Occurrence original){
             this(original.getName(), original.getColor(), original.getTime());
@@ -181,6 +183,8 @@ public class Symptom {
         public String getId(){
             return mId;
         }
+        public int getCount() { return mCount; }
+        public void setCount(int count) { mCount = count; }
         @Override
         public int getType() {
             return TYPE_OCCURRENCE;
@@ -197,7 +201,6 @@ public class Symptom {
         }
         @Override
         public String toString() {
-            String name = super.getName();
             int r = (super.getColor() & 0xFF_00_00) >> 16;
             int g = (super.getColor() & 0x00_FF_00) >> 8;
             int b = (super.getColor() & 0x00_00_FF) >> 0;
@@ -207,7 +210,8 @@ public class Symptom {
             String color = String.format("0x %s %s %s", _r, _g, _b);
             String time = Time.toDateTimeString(this.mTime);
             return "Occurrence{\n" +
-                        "\tName=" + name + "\n" +
+                        "\tName=" + super.getName() + "\n" +
+                        "\tCount=" + mCount + "\n" +
                         "\tColor=" + color + "\n" +
                         "\tTime=" + time + "\n" +
                     '}';
